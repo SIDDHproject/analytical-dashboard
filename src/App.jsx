@@ -616,8 +616,14 @@ function DashboardContent({ user, onLogout, onUpdateProfile }) {
 
 export default function App() {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('vortex_user');
-    return savedUser ? JSON.parse(savedUser) : null;
+    try {
+      const savedUser = localStorage.getItem('vortex_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch (e) {
+      console.error("Failed to parse vortex_user:", e);
+      localStorage.removeItem('vortex_user');
+      return null;
+    }
   });
 
   const handleLogin = (newUser) => {
